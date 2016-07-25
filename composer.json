@@ -1,5 +1,5 @@
 {
-    "name": "doctrine/common",
+    "name": "l-vitaly/doctrine-common",
     "type": "library",
     "description": "Common Library for Doctrine projects",
     "keywords": ["collections", "spl", "eventmanager", "annotations", "persistence"],
