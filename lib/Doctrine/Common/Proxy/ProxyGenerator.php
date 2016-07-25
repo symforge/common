@@ -819,7 +819,7 @@ EOT;
         $baseDirectory = $baseDirectory ?: $this->proxyDirectory;
 
         return rtrim($baseDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . Proxy::MARKER
-            . str_replace('\\', '', $className) . '.php';
+        . str_replace('\\', '', $className) . '.php';
     }
 
     /**
@@ -902,7 +902,9 @@ EOT;
             $parameterDefinition = '';
 
             if ($parameterType = $this->getParameterType($class, $method, $param)) {
-                $parameterDefinition .= $parameterType . ' ';
+                $nullablePrefix = $param->allowsNull() && !$param->isDefaultValueAvailable() ? '?' : '';
+
+                $parameterDefinition .= $nullablePrefix . $parameterType . ' ';
             }
 
             if ($param->isPassedByReference()) {
@@ -1018,20 +1020,22 @@ EOT;
 
         $returnType = $method->getReturnType();
 
+        $nullablePrefix = method_exists($returnType, 'allowsNull') && $returnType->allowsNull() ? '?' : '';
+
         if ($returnType->isBuiltin()) {
-            return ': ' . $returnType;
+            return ': '  . $nullablePrefix . $returnType;
         }
 
         $nameLower = strtolower((string) $returnType);
 
         if ('self' === $nameLower) {
-            return ': \\' . $method->getDeclaringClass()->getName();
+            return ': ' . $nullablePrefix . '\\' . $method->getDeclaringClass()->getName();
         }
 
         if ('parent' === $nameLower) {
-            return ': \\' . $method->getDeclaringClass()->getParentClass()->getName();
+            return ': ' . $nullablePrefix . '\\' . $method->getDeclaringClass()->getParentClass()->getName();
         }
 
-        return ': \\' . (string) $returnType;
+        return ': ' . $nullablePrefix . '\\' . (string) $returnType;
     }
 }
