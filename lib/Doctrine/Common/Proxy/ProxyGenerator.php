@@ -904,7 +904,7 @@ EOT;
             if ($parameterType = $this->getParameterType($class, $method, $param)) {
                 $nullablePrefix = $param->allowsNull() && !$param->isDefaultValueAvailable() ? '?' : '';
 
-                $parameterDefinition .= $nullablePrefix . $parameterType . ' ';
+                $parameterDefinition .= $nullablePrefix.  $parameterType . ' ';
             }
 
             if ($param->isPassedByReference()) {
@@ -925,7 +925,7 @@ EOT;
             $parameterDefinitions[] = $parameterDefinition;
         }
 
-        return implode(', ', $parameterDefinitions);
+        return str_replace('??', '?', implode(', ', $parameterDefinitions));
     }
 
     /**
@@ -1022,9 +1022,12 @@ EOT;
 
         $nullablePrefix = method_exists($returnType, 'allowsNull') && $returnType->allowsNull() ? '?' : '';
 
+
         if ($returnType->isBuiltin()) {
             return ': '  . $nullablePrefix . $returnType;
         }
+
+
 
         $nameLower = strtolower((string) $returnType);
 
@@ -1036,6 +1039,6 @@ EOT;
             return ': ' . $nullablePrefix . '\\' . $method->getDeclaringClass()->getParentClass()->getName();
         }
 
-        return ': ' . $nullablePrefix . '\\' . (string) $returnType;
+        return str_replace('\?', '?\\', ': ' . $nullablePrefix . '\\' . (string) $returnType);
     }
 }
