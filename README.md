@@ -18,7 +18,7 @@ The Doctrine Common project is a library that provides extensions to core PHP fu
     "repositories": [
         {
             "type": "git",
-            "url": "git@github.com/symforge/common.git"
+            "url": "git@github.com:symforge/common.git"
         }
     ],
 
